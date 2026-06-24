@@ -925,24 +925,472 @@ img.src =
 currentPhoto;
 
 }
-{
-  "name": "BP BAYAN GPS CAMERA",
-  "short_name": "BP GPS",
-  "display": "standalone",
-  "start_url": "./",
-  "background_color": "#000000",
-  "theme_color": "#000000",
-  "orientation": "portrait",
-  "icons": [
-    {
-      "src": "assets/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "assets/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
-  ]
+// =====================================
+// DOWNLOAD BUTTON
+// =====================================
+
+const downloadManualBtn =
+document.getElementById(
+"downloadManualBtn"
+);
+
+if(downloadManualBtn){
+
+downloadManualBtn
+.addEventListener(
+"click",
+exportPhoto
+);
+
 }
+
+// =====================================
+// MANUAL PAGE
+// =====================================
+
+const galleryInput =
+document.getElementById(
+"galleryInput"
+);
+
+const uploadGalleryBtn =
+document.getElementById(
+"uploadGalleryBtn"
+);
+
+const extractMapBtn =
+document.getElementById(
+"extractMapBtn"
+);
+
+const mapLink =
+document.getElementById(
+"mapLink"
+);
+
+const manualPreview =
+document.getElementById(
+"manualPreview"
+);
+
+const manualPlace =
+document.getElementById(
+"manualPlace"
+);
+
+const manualAddress =
+document.getElementById(
+"manualAddress"
+);
+
+const manualLat =
+document.getElementById(
+"manualLat"
+);
+
+const manualLng =
+document.getElementById(
+"manualLng"
+);
+
+let manualImage = null;
+
+// =====================================
+// UPLOAD GALERI
+// =====================================
+
+if(uploadGalleryBtn){
+
+uploadGalleryBtn
+.addEventListener(
+"click",
+()=>{
+
+galleryInput.click();
+
+}
+);
+
+}
+
+if(galleryInput){
+
+galleryInput
+.addEventListener(
+"change",
+e=>{
+
+const file =
+e.target.files[0];
+
+if(!file) return;
+
+const reader =
+new FileReader();
+
+reader.onload =
+function(event){
+
+manualImage =
+event.target.result;
+
+manualPreview.src =
+manualImage;
+
+currentPhoto =
+manualImage;
+
+};
+
+reader.readAsDataURL(
+file
+);
+
+}
+);
+
+}
+
+// =====================================
+// PARSER GOOGLE MAPS
+// =====================================
+
+if(extractMapBtn){
+
+extractMapBtn
+.addEventListener(
+"click",
+extractMapData
+);
+
+}
+
+async function extractMapData(){
+
+const url =
+mapLink.value.trim();
+
+if(!url){
+
+alert(
+"Masukkan link Google Maps"
+);
+
+return;
+
+}
+
+// PRIORITAS KOORDINAT OBJEK
+
+const placeMatch =
+url.match(
+/3d(-?\d+\.\d+).*?4d(-?\d+\.\d+)/
+);
+
+if(placeMatch){
+
+manualLat.value =
+placeMatch[1];
+
+manualLng.value =
+placeMatch[2];
+
+await fillAddressData(
+placeMatch[1],
+placeMatch[2]
+);
+
+return;
+
+}
+
+// FALLBACK
+
+const cameraMatch =
+url.match(
+/@(-?\d+\.\d+),(-?\d+\.\d+)/
+);
+
+if(cameraMatch){
+
+manualLat.value =
+cameraMatch[1];
+
+manualLng.value =
+cameraMatch[2];
+
+await fillAddressData(
+cameraMatch[1],
+cameraMatch[2]
+);
+
+return;
+
+}
+
+alert(
+"Koordinat tidak ditemukan"
+);
+
+}
+
+// =====================================
+// REVERSE GEOCODE
+// =====================================
+
+async function fillAddressData(
+lat,
+lng
+){
+
+try{
+
+const response =
+await fetch(
+`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`
+);
+
+const data =
+await response.json();
+
+manualAddress.value =
+data.display_name || "";
+
+manualPlace.value =
+
+data.address?.tourism ||
+
+data.address?.attraction ||
+
+data.address?.village ||
+
+data.address?.town ||
+
+data.address?.city ||
+
+"Lokasi";
+
+}
+catch(error){
+
+console.log(error);
+
+}
+
+}
+
+// =====================================
+// HISTORY
+// =====================================
+
+const historyContainer =
+document.getElementById(
+"historyContainer"
+);
+
+function saveHistory(
+image
+){
+
+let history =
+JSON.parse(
+localStorage.getItem(
+"bp_history"
+)
+) || [];
+
+history.unshift({
+
+image:image,
+
+place:
+gpsData.place,
+
+date:
+new Date()
+.toISOString()
+
+});
+
+localStorage.setItem(
+
+"bp_history",
+
+JSON.stringify(
+history
+)
+
+);
+
+loadHistory();
+
+}
+
+function loadHistory(){
+
+if(!historyContainer)
+return;
+
+let history =
+JSON.parse(
+localStorage.getItem(
+"bp_history"
+)
+) || [];
+
+if(
+history.length === 0
+){
+
+historyContainer.innerHTML =
+`
+<div class="about-card">
+Belum ada riwayat foto
+</div>
+`;
+
+return;
+
+}
+
+historyContainer.innerHTML =
+"";
+
+history.forEach(
+(item,index)=>{
+
+historyContainer.innerHTML +=
+
+`
+<div class="history-card">
+
+<img
+src="${item.image}">
+
+<div class="history-content">
+
+<h4>
+${item.place}
+</h4>
+
+<button
+class="history-btn history-download"
+onclick="downloadHistory(${index})"
+>
+
+Download
+
+</button>
+
+<button
+class="history-btn history-delete"
+onclick="deleteHistory(${index})"
+>
+
+Hapus
+
+</button>
+
+</div>
+
+</div>
+`;
+
+});
+
+}
+
+// =====================================
+// HISTORY ACTION
+// =====================================
+
+window.downloadHistory =
+function(index){
+
+const history =
+JSON.parse(
+localStorage.getItem(
+"bp_history"
+)
+) || [];
+
+const link =
+document.createElement(
+"a"
+);
+
+link.href =
+history[index].image;
+
+link.download =
+"history.jpg";
+
+link.click();
+
+};
+
+window.deleteHistory =
+function(index){
+
+let history =
+JSON.parse(
+localStorage.getItem(
+"bp_history"
+)
+) || [];
+
+history.splice(
+index,
+1
+);
+
+localStorage.setItem(
+
+"bp_history",
+
+JSON.stringify(
+history
+)
+
+);
+
+loadHistory();
+
+};
+
+// =====================================
+// PWA
+// =====================================
+
+if(
+"serviceWorker" in navigator
+){
+
+window.addEventListener(
+"load",
+()=>{
+
+navigator
+.serviceWorker
+.register(
+"./service-worker.js"
+)
+.catch(err=>{
+
+console.log(err);
+
+});
+
+});
+
+}
+
+// =====================================
+// INIT
+// =====================================
+
+loadHistory();
+
+console.log(
+"BP BAYAN GPS CAMERA V3 READY"
+);
