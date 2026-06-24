@@ -937,14 +937,26 @@ height,
 data
 ){
 
+// ==========================
+// DETEKSI ORIENTASI FOTO
+// ==========================
+
+const isPortrait =
+height > width;
+
+// ==========================
+// UKURAN PANEL
+// ==========================
+
 const panelHeight =
-Math.max(
-280,
-height * 0.22
-);
+isPortrait ? 500 : 340;
+
+// ==========================
+// BACKGROUND PANEL
+// ==========================
 
 ctx.fillStyle =
-"rgba(0,0,0,.80)";
+"rgba(0,0,0,0.75)";
 
 ctx.fillRect(
 0,
@@ -953,23 +965,36 @@ width,
 panelHeight
 );
 
+// ==========================
+// POSISI DASAR
+// ==========================
+
+const left = 40;
+
+const top =
+height-panelHeight+50;
+
+const logoSize =
+isPortrait ? 180 : 140;
+
+const logoX =
+width-logoSize-40;
+
+const logoY =
+height-panelHeight+40;
+
+const textWidth =
+width-logoSize-120;
+
+// ==========================
+// JUDUL
+// ==========================
+
 ctx.fillStyle =
 "#ffffff";
 
-const left =
-30;
-
-const top =
-height-panelHeight+35;
-
-const logoSize =
-90;
-
-const textAreaWidth =
-width - 170;
-
 ctx.font =
-"bold 26px Arial";
+"bold 42px Arial";
 
 ctx.fillText(
 "BP BAYAN GPS MAP",
@@ -977,95 +1002,269 @@ left,
 top
 );
 
+// ==========================
+// FONT ISI
+// ==========================
+
 ctx.font =
-"18px Arial";
+"26px Arial";
 
 let y =
-top + 40;
+top + 55;
 
-y = wrapText(
-ctx,
-"📍 " + data.place,
-left,
-y,
-textAreaWidth,
-28
-);
+// ==========================
+// WRAP TEXT FUNCTION
+// ==========================
 
-y += 10;
+function drawWrappedText(
+text,
+x,
+startY,
+maxWidth,
+lineHeight
+){
 
-y = wrapText(
-ctx,
-"📮 " + data.address,
-left,
-y,
-textAreaWidth,
-28
-);
+const words =
+String(text)
+.split(" ");
 
-y += 10;
+let line = "";
 
-ctx.fillText(
-"🌎 " + data.lat,
-left,
-y
-);
+let currentY =
+startY;
 
-y += 28;
+for(
+let i=0;
+i<words.length;
+i++
+){
 
-ctx.fillText(
-"    " + data.lng,
-left,
-y
-);
+const testLine =
+line +
+words[i] +
+" ";
 
-y += 35;
-
-ctx.fillText(
-"🕒 " + data.time,
-left,
-y
+const metrics =
+ctx.measureText(
+testLine
 );
 
 if(
-data.activity
+metrics.width > maxWidth
+&& i > 0
 ){
 
-y += 35;
+ctx.fillText(
+line,
+x,
+currentY
+);
+
+line =
+words[i] + " ";
+
+currentY +=
+lineHeight;
+
+}
+else{
+
+line =
+testLine;
+
+}
+
+}
 
 ctx.fillText(
-"📝 " + data.activity,
+line,
+x,
+currentY
+);
+
+return currentY;
+
+}
+
+// ==========================
+// NAMA TEMPAT
+// ==========================
+
+y = drawWrappedText(
+
+"📍 " +
+(data.place || "-"),
+
+left,
+
+y,
+
+textWidth,
+
+32
+
+);
+
+y += 40;
+
+// ==========================
+// ALAMAT
+// ==========================
+
+y = drawWrappedText(
+
+"📮 " +
+(data.address || "-"),
+
+left,
+
+y,
+
+textWidth,
+
+32
+
+);
+
+y += 45;
+
+// ==========================
+// LAT LONG
+// ==========================
+
+ctx.fillText(
+"🌎 " +
+(data.lat || "-"),
 left,
 y
 );
 
+y += 35;
+
+ctx.fillText(
+"     " +
+(data.lng || "-"),
+left,
+y
+);
+
+y += 45;
+
+// ==========================
+// WAKTU
+// ==========================
+
+y = drawWrappedText(
+
+"🕒 " +
+(data.time || "-"),
+
+left,
+
+y,
+
+textWidth,
+
+32
+
+);
+
+y += 45;
+
+// ==========================
+// KEGIATAN
+// ==========================
+
+if(
+data.activity &&
+data.activity.trim() !== ""
+){
+
+y = drawWrappedText(
+
+"📝 " +
+data.activity,
+
+left,
+
+y,
+
+textWidth,
+
+32
+
+);
+
+y += 40;
+
 }
+
+// ==========================
+// FOOTER
+// ==========================
+
+ctx.font =
+"20px Arial";
+
+ctx.fillStyle =
+"rgba(255,255,255,.85)";
+
+ctx.fillText(
+
+"Kabupaten Lombok Utara",
+
+left,
+
+height-25
+
+);
+
+// ==========================
+// GARIS PEMBATAS
+// ==========================
+
+ctx.strokeStyle =
+"rgba(255,255,255,.25)";
+
+ctx.lineWidth = 2;
+
+ctx.beginPath();
+
+ctx.moveTo(
+logoX-30,
+height-panelHeight+30
+);
+
+ctx.lineTo(
+logoX-30,
+height-30
+);
+
+ctx.stroke();
+
+// ==========================
+// LOGO
+// ==========================
 
 if(
 watermarkLogo.complete
 ){
 
 ctx.drawImage(
+
 watermarkLogo,
-width-130,
-height-panelHeight+40,
+
+logoX,
+
+logoY,
+
 logoSize,
+
 logoSize
+
 );
 
 }
-
-ctx.font =
-"14px Arial";
-
-ctx.fillStyle =
-"rgba(255,255,255,.75)";
-
-ctx.fillText(
-"Kabupaten Lombok Utara",
-left,
-height-20
-);
 
 }
 
