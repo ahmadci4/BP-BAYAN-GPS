@@ -1,10 +1,10 @@
 {
-  "name": "BP BAYAN GPS MAP",
+  "name": "BP BAYAN GPS CAMERA",
   "short_name": "BP GPS",
-  "start_url": "./",
   "display": "standalone",
-  "background_color": "#0f766e",
-  "theme_color": "#0f766e",
+  "start_url": "./",
+  "background_color": "#000000",
+  "theme_color": "#000000",
   "orientation": "portrait",
   "icons": [
     {
