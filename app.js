@@ -1,166 +1,133 @@
 // ======================================
-// BP BAYAN GPS CAMERA V4 PROFESSIONAL
-// APP.JS BAGIAN 1
+// BP BAYAN GPS CAMERA
+// V4 FINAL CLEAN
 // ======================================
 
-// ===============================
-// SPLASH
-// ===============================
-
-window.addEventListener(
-"load",
-()=>{
-
-setTimeout(()=>{
-
-document
-.getElementById(
-"splashScreen"
-)
-.style.display =
-"none";
-
-document
-.getElementById(
-"app"
-)
-.style.display =
-"block";
-
-initCamera();
-
-refreshGPS();
-
-startClock();
-
-loadHistory();
-
-},2000);
-
-});
-
-// ===============================
+// ======================================
 // ELEMENT
-// ===============================
+// ======================================
+
+const app =
+document.getElementById("app");
+
+const splashScreen =
+document.getElementById("splashScreen");
 
 const camera =
-document.getElementById(
-"camera"
-);
+document.getElementById("camera");
 
 const captureBtn =
-document.getElementById(
-"captureBtn"
-);
+document.getElementById("captureBtn");
 
 const previewBtn =
-document.getElementById(
-"previewBtn"
-);
+document.getElementById("previewBtn");
 
 const galleryBtn =
-document.getElementById(
-"galleryBtn"
-);
+document.getElementById("galleryBtn");
 
 const gpsManualBtn =
-document.getElementById(
-"gpsManualBtn"
-);
+document.getElementById("gpsManualBtn");
 
 const templateBtn =
-document.getElementById(
-"templateBtn"
-);
+document.getElementById("templateBtn");
 
 const refreshGPSBtn =
-document.getElementById(
-"refreshGPSBtn"
-);
+document.getElementById("refreshGPSBtn");
 
 const switchCameraBtn =
-document.getElementById(
-"switchCameraBtn"
-);
+document.getElementById("switchCameraBtn");
 
 const previewModal =
-document.getElementById(
-"previewModal"
-);
+document.getElementById("previewModal");
 
 const previewImage =
-document.getElementById(
-"previewImage"
-);
+document.getElementById("previewImage");
 
 const closePreviewBtn =
-document.getElementById(
-"closePreviewBtn"
-);
+document.getElementById("closePreviewBtn");
 
 const exportCanvas =
-document.getElementById(
-"exportCanvas"
-);
+document.getElementById("exportCanvas");
 
 const exportCtx =
-exportCanvas.getContext(
-"2d"
-);
+exportCanvas.getContext("2d");
 
 const watermarkLogo =
-document.getElementById(
-"watermarkLogo"
-);
+document.getElementById("watermarkLogo");
 
-// ===============================
-// GPS INFO
-// ===============================
+// GPS LIVE
 
 const liveTime =
-document.getElementById(
-"liveTime"
-);
+document.getElementById("liveTime");
 
 const liveDate =
-document.getElementById(
-"liveDate"
-);
+document.getElementById("liveDate");
 
 const livePlace =
-document.getElementById(
-"livePlace"
-);
+document.getElementById("livePlace");
 
 const liveAddress =
-document.getElementById(
-"liveAddress"
-);
+document.getElementById("liveAddress");
 
 const liveLat =
-document.getElementById(
-"liveLat"
-);
+document.getElementById("liveLat");
 
 const liveLng =
-document.getElementById(
-"liveLng"
-);
+document.getElementById("liveLng");
 
-// ===============================
-// DATA
-// ===============================
+// MANUAL
 
-let currentPhoto =
-null;
+const galleryInput =
+document.getElementById("galleryInput");
+
+const uploadGalleryBtn =
+document.getElementById("uploadGalleryBtn");
+
+const manualPreview =
+document.getElementById("manualPreview");
+
+const mapLink =
+document.getElementById("mapLink");
+
+const extractMapBtn =
+document.getElementById("extractMapBtn");
+
+const manualPlace =
+document.getElementById("manualPlace");
+
+const manualAddress =
+document.getElementById("manualAddress");
+
+const manualLat =
+document.getElementById("manualLat");
+
+const manualLng =
+document.getElementById("manualLng");
+
+const manualActivity =
+document.getElementById("manualActivity");
+
+const downloadManualBtn =
+document.getElementById("downloadManualBtn");
+
+// HISTORY
+
+const historyContainer =
+document.getElementById("historyContainer");
+
+// ======================================
+// GLOBAL DATA
+// ======================================
+
+let stream = null;
+
+let currentPhoto = null;
 
 let currentTemplate =
 "professional";
 
 let currentFacingMode =
 "environment";
-
-let stream = null;
 
 let gpsData = {
 
@@ -173,9 +140,44 @@ time:""
 
 };
 
-// ===============================
+// ======================================
+// APP START
+// ======================================
+
+window.addEventListener(
+"load",
+async ()=>{
+
+setTimeout(
+async ()=>{
+
+splashScreen.style.display =
+"none";
+
+app.style.display =
+"block";
+
+startClock();
+
+await initCamera();
+
+setTimeout(()=>{
+
+refreshGPS();
+
+},1000);
+
+loadHistory();
+
+},
+1800
+);
+
+});
+
+// ======================================
 // CLOCK
-// ===============================
+// ======================================
 
 function startClock(){
 
@@ -208,17 +210,25 @@ year:"numeric"
 }
 );
 
+if(liveTime){
+
 liveTime.innerText =
 gpsData.time;
+
+}
+
+if(liveDate){
 
 liveDate.innerText =
 gpsData.date;
 
 }
 
-// ===============================
+}
+
+// ======================================
 // CAMERA
-// ===============================
+// ======================================
 
 async function initCamera(){
 
@@ -228,11 +238,11 @@ if(stream){
 
 stream
 .getTracks()
-.forEach(
-track=>{
+.forEach(track=>{
+
 track.stop();
-}
-);
+
+});
 
 }
 
@@ -263,6 +273,8 @@ audio:false
 camera.srcObject =
 stream;
 
+await camera.play();
+
 }
 catch(error){
 
@@ -276,14 +288,14 @@ alert(
 
 }
 
-// ===============================
+// ======================================
 // SWITCH CAMERA
-// ===============================
+// ======================================
 
 switchCameraBtn
 .addEventListener(
 "click",
-()=>{
+async ()=>{
 
 currentFacingMode =
 
@@ -298,14 +310,14 @@ currentFacingMode ===
 
 "environment";
 
-initCamera();
+await initCamera();
 
 }
 );
 
-// ===============================
+// ======================================
 // GPS LIVE
-// ===============================
+// ======================================
 
 refreshGPSBtn
 .addEventListener(
@@ -354,7 +366,7 @@ error=>{
 console.log(error);
 
 alert(
-"Gagal mengambil GPS"
+"Gagal mengambil lokasi"
 );
 
 },
@@ -369,10 +381,6 @@ maximumAge:0
 
 }
 
-// ===============================
-// REVERSE GEOCODE
-// ===============================
-
 async function reverseGeocode(
 lat,
 lng
@@ -382,9 +390,7 @@ try{
 
 const response =
 await fetch(
-
 `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`
-
 );
 
 const data =
@@ -411,7 +417,7 @@ data.address?.town ||
 
 data.address?.city ||
 
-"Lokasi Tidak Diketahui";
+"Lokasi";
 
 }
 catch(error){
@@ -421,10 +427,6 @@ console.log(error);
 }
 
 }
-
-// ===============================
-// UPDATE OVERLAY
-// ===============================
 
 function updateGPSOverlay(){
 
@@ -443,10 +445,9 @@ liveLng.innerText =
 gpsData.lng;
 
 }
-
-// ===============================
+// ======================================
 // NAVIGATION
-// ===============================
+// ======================================
 
 const navBtns =
 document.querySelectorAll(
@@ -496,8 +497,9 @@ btn.classList.add(
 });
 
 });
+
 // ======================================
-// CAPTURE PHOTO HD
+// CAPTURE PHOTO
 // ======================================
 
 captureBtn.addEventListener(
@@ -508,7 +510,7 @@ capturePhoto
 function capturePhoto(){
 
 if(
-!camera.videoWidth
+!camera.srcObject
 ){
 
 alert(
@@ -524,11 +526,17 @@ document.createElement(
 "canvas"
 );
 
+const width =
+camera.videoWidth || 1920;
+
+const height =
+camera.videoHeight || 1080;
+
 canvas.width =
-camera.videoWidth;
+width;
 
 canvas.height =
-camera.videoHeight;
+height;
 
 const ctx =
 canvas.getContext(
@@ -539,8 +547,8 @@ ctx.drawImage(
 camera,
 0,
 0,
-canvas.width,
-canvas.height
+width,
+height
 );
 
 currentPhoto =
@@ -556,6 +564,92 @@ saveHistory(
 currentPhoto,
 gpsData.place
 );
+
+downloadLivePhoto();
+
+}
+
+// ======================================
+// DOWNLOAD LIVE PHOTO
+// ======================================
+
+function downloadLivePhoto(){
+
+if(!currentPhoto)
+return;
+
+const img =
+new Image();
+
+img.onload =
+function(){
+
+exportCanvas.width =
+img.width;
+
+exportCanvas.height =
+img.height;
+
+exportCtx.drawImage(
+img,
+0,
+0
+);
+
+drawProfessionalWatermark(
+
+exportCtx,
+
+exportCanvas.width,
+
+exportCanvas.height,
+
+{
+
+place:
+gpsData.place,
+
+address:
+gpsData.address,
+
+lat:
+gpsData.lat,
+
+lng:
+gpsData.lng,
+
+activity:"",
+
+date:
+gpsData.date,
+
+time:
+gpsData.time
+
+}
+
+);
+
+const link =
+document.createElement(
+"a"
+);
+
+link.download =
+"BP-BAYAN-GPS.jpg";
+
+link.href =
+exportCanvas.toDataURL(
+"image/jpeg",
+1
+);
+
+link.click();
+
+};
+
+img.src =
+currentPhoto;
 
 }
 
@@ -601,11 +695,6 @@ previewModal.classList.add(
 // HISTORY
 // ======================================
 
-const historyContainer =
-document.getElementById(
-"historyContainer"
-);
-
 function saveHistory(
 image,
 place
@@ -645,6 +734,9 @@ loadHistory();
 
 function loadHistory(){
 
+if(!historyContainer)
+return;
+
 let history =
 JSON.parse(
 localStorage.getItem(
@@ -683,7 +775,7 @@ historyContainer.innerHTML +=
 <div class="historyContent">
 
 <h4>
-${item.place}
+${item.place || 'Tanpa Nama'}
 </h4>
 
 <div class="historyAction">
@@ -767,60 +859,9 @@ history)
 loadHistory();
 
 };
-
 // ======================================
-// MANUAL PAGE
+// MANUAL PHOTO
 // ======================================
-
-const galleryInput =
-document.getElementById(
-"galleryInput"
-);
-
-const uploadGalleryBtn =
-document.getElementById(
-"uploadGalleryBtn"
-);
-
-const manualPreview =
-document.getElementById(
-"manualPreview"
-);
-
-const mapLink =
-document.getElementById(
-"mapLink"
-);
-
-const extractMapBtn =
-document.getElementById(
-"extractMapBtn"
-);
-
-const manualPlace =
-document.getElementById(
-"manualPlace"
-);
-
-const manualAddress =
-document.getElementById(
-"manualAddress"
-);
-
-const manualLat =
-document.getElementById(
-"manualLat"
-);
-
-const manualLng =
-document.getElementById(
-"manualLng"
-);
-
-const manualActivity =
-document.getElementById(
-"manualActivity"
-);
 
 uploadGalleryBtn
 .addEventListener(
@@ -839,7 +880,8 @@ e=>{
 const file =
 e.target.files[0];
 
-if(!file) return;
+if(!file)
+return;
 
 const reader =
 new FileReader();
@@ -862,7 +904,7 @@ file
 });
 
 // ======================================
-// GOOGLE MAPS PARSER AKURAT
+// GOOGLE MAPS PARSER
 // ======================================
 
 extractMapBtn
@@ -886,7 +928,7 @@ return;
 
 }
 
-// AMBIL NAMA TEMPAT DARI URL
+// NAMA TEMPAT
 
 try{
 
@@ -904,7 +946,12 @@ placeMatch[1]
 
 }
 
-}catch(err){}
+}
+catch(error){
+
+console.log(error);
+
+}
 
 // KOORDINAT OBJEK
 
@@ -932,22 +979,22 @@ return;
 
 // FALLBACK
 
-const cameraMatch =
+const fallbackMatch =
 url.match(
 /@(-?\d+\.\d+),(-?\d+\.\d+)/
 );
 
-if(cameraMatch){
+if(fallbackMatch){
 
 manualLat.value =
-cameraMatch[1];
+fallbackMatch[1];
 
 manualLng.value =
-cameraMatch[2];
+fallbackMatch[2];
 
 await fillAddressData(
-cameraMatch[1],
-cameraMatch[2]
+fallbackMatch[1],
+fallbackMatch[2]
 );
 
 return;
@@ -955,10 +1002,11 @@ return;
 }
 
 alert(
-"Lokasi tidak ditemukan"
+"Koordinat tidak ditemukan"
 );
 
 }
+
 // ======================================
 // REVERSE GEOCODE MANUAL
 // ======================================
@@ -981,7 +1029,6 @@ await response.json();
 manualAddress.value =
 data.display_name || "";
 
-// JANGAN TIMPA NAMA TEMPAT
 if(
 manualPlace.value.trim() === ""
 ){
@@ -1018,266 +1065,8 @@ console.log(error);
 }
 
 // ======================================
-// WRAP TEXT
-// ======================================
-
-function drawWrappedText(
-ctx,
-text,
-x,
-y,
-maxWidth,
-lineHeight
-){
-
-const words =
-String(text)
-.split(" ");
-
-let line = "";
-
-for(
-let i=0;
-i<words.length;
-i++
-){
-
-const testLine =
-line +
-words[i] +
-" ";
-
-const metrics =
-ctx.measureText(
-testLine
-);
-
-if(
-metrics.width > maxWidth
-&&
-i > 0
-){
-
-ctx.fillText(
-line,
-x,
-y
-);
-
-line =
-words[i] + " ";
-
-y += lineHeight;
-
-}
-else{
-
-line =
-testLine;
-
-}
-
-}
-
-ctx.fillText(
-line,
-x,
-y
-);
-
-return y;
-
-}
-
-// ======================================
-// WATERMARK PROFESSIONAL
-// ======================================
-
-function drawProfessionalWatermark(
-ctx,
-width,
-height,
-data
-){
-
-const panelHeight =
-
-height > width
-
-?
-
-520
-
-:
-
-360;
-
-ctx.fillStyle =
-"rgba(0,0,0,.72)";
-
-ctx.fillRect(
-0,
-height-panelHeight,
-width,
-panelHeight
-);
-
-const left = 40;
-
-let y =
-height-panelHeight+55;
-
-ctx.fillStyle =
-"#ffffff";
-
-// WAKTU
-
-ctx.font =
-"bold 42px Poppins";
-
-ctx.fillText(
-data.time,
-left,
-y
-);
-
-ctx.font =
-"bold 32px Poppins";
-
-ctx.fillText(
-data.date,
-width-320,
-y
-);
-
-y += 70;
-
-// TEMPAT
-
-ctx.font =
-"bold 38px Poppins";
-
-y = drawWrappedText(
-
-ctx,
-
-"📍 " +
-data.place,
-
-left,
-
-y,
-
-width-120,
-
-48
-
-);
-
-y += 25;
-
-// ALAMAT
-
-ctx.font =
-"28px Poppins";
-
-y = drawWrappedText(
-
-ctx,
-
-"📮 " +
-data.address,
-
-left,
-
-y,
-
-width-120,
-
-38
-
-);
-
-y += 25;
-
-// LAT LNG
-
-ctx.font =
-"bold 26px Poppins";
-
-ctx.fillText(
-"🌎 " + data.lat,
-left,
-y
-);
-
-y += 38;
-
-ctx.fillText(
-"     " + data.lng,
-left,
-y
-);
-
-y += 45;
-
-// KEGIATAN
-
-if(
-data.activity &&
-data.activity.trim() !== ""
-){
-
-ctx.font =
-"26px Poppins";
-
-y = drawWrappedText(
-
-ctx,
-
-"📝 " +
-data.activity,
-
-left,
-
-y,
-
-width-120,
-
-36
-
-);
-
-}
-
-// BRAND KECIL
-
-ctx.font =
-"bold 22px Poppins";
-
-ctx.fillStyle =
-"#ffd400";
-
-ctx.fillText(
-
-"BP BAYAN GPS CAMERA",
-
-left,
-
-height-25
-
-);
-
-}
-
-// ======================================
 // DOWNLOAD MANUAL
 // ======================================
-
-const downloadManualBtn =
-document.getElementById(
-"downloadManualBtn"
-);
 
 downloadManualBtn
 .addEventListener(
@@ -1370,6 +1159,300 @@ link.click();
 
 img.src =
 currentPhoto;
+
+}
+
+// ======================================
+// WRAP TEXT
+// ======================================
+
+function drawWrappedText(
+ctx,
+text,
+x,
+y,
+maxWidth,
+lineHeight
+){
+
+const words =
+String(text)
+.split(" ");
+
+let line = "";
+
+for(
+let i=0;
+i<words.length;
+i++
+){
+
+const testLine =
+line +
+words[i] +
+" ";
+
+const width =
+ctx.measureText(
+testLine
+).width;
+
+if(
+width > maxWidth &&
+i > 0
+){
+
+ctx.fillText(
+line,
+x,
+y
+);
+
+line =
+words[i] + " ";
+
+y += lineHeight;
+
+}
+else{
+
+line =
+testLine;
+
+}
+
+}
+
+ctx.fillText(
+line,
+x,
+y
+);
+
+return y;
+
+}
+// ======================================
+// PROFESSIONAL WATERMARK
+// ======================================
+
+function drawProfessionalWatermark(
+ctx,
+width,
+height,
+data
+){
+
+const portrait =
+height > width;
+
+const panelHeight =
+portrait
+?
+650
+:
+420;
+
+ctx.fillStyle =
+"rgba(0,0,0,.75)";
+
+ctx.fillRect(
+0,
+height-panelHeight,
+width,
+panelHeight
+);
+
+const left = 40;
+
+let y =
+height-panelHeight+60;
+
+ctx.fillStyle =
+"#ffffff";
+
+// JAM
+
+ctx.font =
+"bold 42px Arial";
+
+ctx.fillText(
+data.time || "-",
+left,
+y
+);
+
+// TANGGAL
+
+ctx.font =
+"bold 32px Arial";
+
+ctx.fillText(
+data.date || "-",
+width-320,
+y
+);
+
+y += 75;
+
+// TEMPAT
+
+ctx.font =
+"bold 40px Arial";
+
+y = drawWrappedText(
+
+ctx,
+
+"📍 " +
+(data.place || "-"),
+
+left,
+
+y,
+
+width-100,
+
+50
+
+);
+
+y += 20;
+
+// ALAMAT
+
+ctx.font =
+"28px Arial";
+
+y = drawWrappedText(
+
+ctx,
+
+"📮 " +
+(data.address || "-"),
+
+left,
+
+y,
+
+width-100,
+
+38
+
+);
+
+y += 25;
+
+// LAT
+
+ctx.font =
+"bold 26px Arial";
+
+ctx.fillText(
+
+"🌎 " +
+(data.lat || "-"),
+
+left,
+
+y
+
+);
+
+y += 38;
+
+// LNG
+
+ctx.fillText(
+
+"     " +
+(data.lng || "-"),
+
+left,
+
+y
+
+);
+
+y += 45;
+
+// KEGIATAN
+
+if(
+data.activity &&
+data.activity.trim() !== ""
+){
+
+ctx.font =
+"26px Arial";
+
+y = drawWrappedText(
+
+ctx,
+
+"📝 " +
+data.activity,
+
+left,
+
+y,
+
+width-100,
+
+36
+
+);
+
+}
+
+// LOGO KECIL
+
+try{
+
+if(
+watermarkLogo &&
+watermarkLogo.complete
+){
+
+ctx.drawImage(
+
+watermarkLogo,
+
+width-130,
+
+height-panelHeight+30,
+
+80,
+
+80
+
+);
+
+}
+
+}catch(err){
+
+console.log(err);
+
+}
+
+// BRAND
+
+ctx.fillStyle =
+"#ffd400";
+
+ctx.font =
+"bold 22px Arial";
+
+ctx.fillText(
+
+"BP BAYAN GPS CAMERA",
+
+left,
+
+height-25
+
+);
 
 }
 
@@ -1472,6 +1555,13 @@ navigator
 .register(
 "./service-worker.js"
 )
+.then(()=>{
+
+console.log(
+"Service Worker Registered"
+);
+
+})
 .catch(err=>{
 
 console.log(err);
@@ -1483,9 +1573,54 @@ console.log(err);
 }
 
 // ======================================
+// GALLERY SHORTCUT
+// ======================================
+
+galleryBtn
+.addEventListener(
+"click",
+()=>{
+
+document
+.querySelector(
+'[data-page="historyPage"]'
+)
+.click();
+
+});
+
+// ======================================
 // READY
 // ======================================
 
 console.log(
-"BP BAYAN GPS CAMERA V4 READY"
+"================================="
+);
+
+console.log(
+"BP BAYAN GPS CAMERA V4 FINAL"
+);
+
+console.log(
+"GPS LIVE READY"
+);
+
+console.log(
+"GPS MANUAL READY"
+);
+
+console.log(
+"HISTORY READY"
+);
+
+console.log(
+"PWA READY"
+);
+
+console.log(
+"DOWNLOAD READY"
+);
+
+console.log(
+"================================="
 );
