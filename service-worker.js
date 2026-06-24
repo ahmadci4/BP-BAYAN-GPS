@@ -1,5 +1,14 @@
 const CACHE_NAME =
-"bp-bayan-gps-map-v21";
+"bp-bayan-gps-camera-v3";
+
+const urlsToCache = [
+
+"./",
+"./index.html",
+"./style.css",
+"./app.js"
+
+];
 
 self.addEventListener(
 "install",
@@ -7,15 +16,14 @@ event=>{
 
 event.waitUntil(
 
-caches.open(CACHE_NAME)
+caches.open(
+CACHE_NAME
+)
 .then(cache=>{
 
-return cache.addAll([
-"./",
-"./index.html",
-"./style.css",
-"./app.js"
-]);
+return cache.addAll(
+urlsToCache
+);
 
 })
 
@@ -35,7 +43,9 @@ event.request
 .then(response=>{
 
 return response ||
-fetch(event.request);
+fetch(
+event.request
+);
 
 })
 
