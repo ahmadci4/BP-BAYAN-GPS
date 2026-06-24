@@ -1,24 +1,43 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
 
 <title>BP BAYAN GPS MAP</title>
 
-<meta name="theme-color" content="#0f766e">
+<meta
+name="theme-color"
+content="#0f766e">
 
-<link rel="manifest" href="manifest.json">
+<link
+rel="manifest"
+href="manifest.json">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
+<link
+rel="icon"
+href="assets/icon-192.png">
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link
+rel="apple-touch-icon"
+href="assets/icon-192.png">
 
-<link rel="stylesheet" href="style.css">
+<link
+href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+rel="stylesheet">
 
-<link rel="stylesheet"
+<link
+rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<link
+rel="stylesheet"
+href="style.css">
 
 </head>
 
@@ -32,18 +51,21 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
 <img
 src="assets/logo.png"
-class="splash-logo"
->
+class="splash-logo">
 
 <h1>
 BP BAYAN GPS MAP
 </h1>
 
 <p>
-GPS Camera & Dokumentasi Lapangan
+GPS Camera Dokumentasi Lapangan
 </p>
 
-<div class="loader"></div>
+<div class="loading-bar">
+
+<div class="loading-fill"></div>
+
+</div>
 
 </div>
 
@@ -55,14 +77,13 @@ GPS Camera & Dokumentasi Lapangan
 
 <!-- HEADER -->
 
-<header class="topbar">
+<header class="top-header">
 
-<div class="topbar-left">
+<div class="header-left">
 
 <img
 src="assets/logo.png"
-class="header-logo"
->
+class="app-logo">
 
 <div>
 
@@ -71,7 +92,7 @@ BP BAYAN GPS MAP
 </h2>
 
 <p>
-Dokumentasi Lapangan
+Kabupaten Lombok Utara
 </p>
 
 </div>
@@ -80,115 +101,92 @@ Dokumentasi Lapangan
 
 </header>
 
-<!-- PAGE GPS LIVE -->
+<!-- ========================= -->
+<!-- GPS LANGSUNG -->
+<!-- ========================= -->
 
 <section
-id="gpsLivePage"
-class="page active-page"
->
+id="gpsPage"
+class="page active-page">
 
-<div class="page-header">
+<div class="section-title">
 
-<h3>
 GPS Langsung
-</h3>
 
 </div>
 
-<div class="camera-box">
+<div class="camera-card">
 
 <video
-id="liveCamera"
+id="liveVideo"
 autoplay
-playsinline
-></video>
+playsinline></video>
 
 <img
-id="livePreview"
->
+id="liveImage">
 
 </div>
 
-<div class="gps-info-card">
+<div class="info-card">
 
-<div class="info-row">
+<div class="info-item">
 
-<span>
-📍 Lokasi
-</span>
+<label>Nama Tempat</label>
 
-<strong
-id="liveLocation"
->
+<div id="livePlace">
 -
-</strong>
+</div>
 
 </div>
 
-<div class="info-row">
+<div class="info-item">
 
-<span>
-📮 Alamat
-</span>
+<label>Alamat</label>
 
-<strong
-id="liveAddress"
->
+<div id="liveAddress">
 -
-</strong>
+</div>
 
 </div>
 
-<div class="info-row">
+<div class="grid2">
 
-<span>
-🌎 Latitude
-</span>
+<div>
 
-<strong
+<label>Latitude</label>
+
+<input
 id="liveLat"
->
--
-</strong>
+readonly>
 
 </div>
 
-<div class="info-row">
+<div>
 
-<span>
-🌎 Longitude
-</span>
+<label>Longitude</label>
 
-<strong
+<input
 id="liveLng"
->
--
-</strong>
-
-</div>
-
-<div class="info-row">
-
-<span>
-🕒 Waktu
-</span>
-
-<strong
-id="liveTime"
->
--
-</strong>
+readonly>
 
 </div>
 
 </div>
 
-<div class="action-area">
+<div>
+
+<label>Kegiatan</label>
+
+<input
+id="liveActivity"
+placeholder="Contoh : Monitoring Posyandu">
+</div>
+
+</div>
 
 <button
-id="captureLiveBtn"
-class="main-btn"
->
+id="captureBtn"
+class="btn-primary">
 
 <i class="fa-solid fa-camera"></i>
 
@@ -198,8 +196,7 @@ Ambil Foto
 
 <button
 id="downloadLiveBtn"
-class="main-btn green-btn"
->
+class="btn-success">
 
 <i class="fa-solid fa-download"></i>
 
@@ -207,57 +204,51 @@ Download Foto
 
 </button>
 
-</div>
-
 </section>
 
-<!-- PAGE EDIT -->
+<!-- ========================= -->
+<!-- GPS MANUAL -->
+<!-- ========================= -->
 
 <section
 id="manualPage"
-class="page"
->
+class="page">
 
-<div class="page-header">
+<div class="section-title">
 
-<h3>
 GPS Edit Manual
-</h3>
 
 </div>
 
-<div class="source-grid">
+<div class="manual-actions">
 
 <button
-id="manualCameraBtn"
-class="source-btn"
->
-
-<i class="fa-solid fa-camera"></i>
-
-<span>Kamera</span>
-
-</button>
-
-<button
-id="manualGalleryBtn"
-class="source-btn"
->
+id="galleryBtn"
+class="tool-btn">
 
 <i class="fa-solid fa-image"></i>
 
-<span>Galeri</span>
+Galeri
 
 </button>
 
 <button
-id="mapLinkBtn"
-class="source-btn"
->
+id="cameraBtn"
+class="tool-btn">
+
+<i class="fa-solid fa-camera"></i>
+
+Kamera
+
+</button>
+
+<button
+id="extractBtn"
+class="tool-btn">
 
 <i class="fa-solid fa-link"></i>
 
-<span>Link Maps</span>
+Maps
 
 </button>
 
@@ -267,57 +258,46 @@ class="source-btn"
 type="file"
 accept="image/*"
 id="galleryInput"
-hidden
->
+hidden>
 
-<div class="preview-box">
+<div class="preview-card">
 
 <img
-id="manualPreview"
->
+id="manualPreview">
 
 </div>
 
 <input
 id="mapLink"
-type="text"
-placeholder="Paste Link Google Maps"
->
+placeholder="Paste Link Google Maps">
 
 <input
 id="manualPlace"
-type="text"
-placeholder="Nama Tempat"
->
+placeholder="Nama Tempat">
 
 <textarea
 id="manualAddress"
-placeholder="Alamat Lengkap"
-></textarea>
+placeholder="Alamat Lengkap"></textarea>
 
-<div class="grid-2">
+<div class="grid2">
 
 <input
 id="manualLat"
-placeholder="Latitude"
->
+placeholder="Latitude">
 
 <input
 id="manualLng"
-placeholder="Longitude"
->
+placeholder="Longitude">
 
 </div>
 
 <input
 id="manualActivity"
-placeholder="Nama Kegiatan"
->
+placeholder="Nama Kegiatan">
 
 <button
 id="downloadManualBtn"
-class="main-btn green-btn"
->
+class="btn-success">
 
 <i class="fa-solid fa-download"></i>
 
@@ -326,69 +306,55 @@ Download Foto
 </button>
 
 </section>
-<!-- PAGE RIWAYAT -->
+
+<!-- ========================= -->
+<!-- RIWAYAT -->
+<!-- ========================= -->
 
 <section
 id="historyPage"
-class="page"
->
+class="page">
 
-<div class="page-header">
+<div class="section-title">
 
-<h3>
 Riwayat Foto
-</h3>
 
 </div>
 
 <div
-id="historyContainer"
-class="history-container"
->
-
-<div class="empty-history">
-
-<i class="fa-solid fa-images"></i>
-
-<p>
-Belum ada riwayat foto
-</p>
-
-</div>
+id="historyContainer">
 
 </div>
 
 </section>
 
-<!-- PAGE ABOUT -->
+<!-- ========================= -->
+<!-- ABOUT -->
+<!-- ========================= -->
 
 <section
 id="aboutPage"
-class="page"
->
+class="page">
 
 <div class="about-card">
 
 <img
 src="assets/logo.png"
-class="about-logo"
->
+class="about-logo">
 
 <h2>
 BP BAYAN GPS MAP
 </h2>
 
-<p class="version">
-Versi 2.0
+<p class="about-version">
+Versi 2.1 Final
 </p>
 
-<div class="about-divider"></div>
+<hr>
 
-<div class="about-item">
+<div class="about-row">
 
-<label>
-Pembuat
-</label>
+<b>Pembuat</b>
 
 <span>
 Ahmad Yani
@@ -396,11 +362,9 @@ Ahmad Yani
 
 </div>
 
-<div class="about-item">
+<div class="about-row">
 
-<label>
-Email
-</label>
+<b>Email</b>
 
 <span>
 ahmadstimik15@gmail.com
@@ -408,11 +372,9 @@ ahmadstimik15@gmail.com
 
 </div>
 
-<div class="about-item">
+<div class="about-row">
 
-<label>
-WhatsApp
-</label>
+<b>WhatsApp</b>
 
 <span>
 085956684081
@@ -420,14 +382,12 @@ WhatsApp
 
 </div>
 
-<div class="about-item">
+<div class="about-row">
 
-<label>
-Deskripsi
-</label>
+<b>Deskripsi</b>
 
 <span>
-Aplikasi GPS Camera untuk dokumentasi lapangan dengan GPS otomatis, GPS manual, riwayat foto, dan watermark profesional.
+Aplikasi GPS Camera Dokumentasi Lapangan dengan GPS otomatis, GPS manual, riwayat foto dan watermark profesional.
 </span>
 
 </div>
@@ -436,78 +396,64 @@ Aplikasi GPS Camera untuk dokumentasi lapangan dengan GPS otomatis, GPS manual, 
 
 </section>
 
-<!-- BOTTOM NAVIGATION -->
+<!-- ========================= -->
+<!-- BOTTOM NAV -->
+<!-- ========================= -->
 
 <nav class="bottom-nav">
 
 <button
-class="nav-btn active-nav"
-data-page="gpsLivePage"
->
+class="nav-item active-nav"
+data-page="gpsPage">
 
 <i class="fa-solid fa-satellite-dish"></i>
 
-<span>
-GPS
-</span>
+<span>GPS</span>
 
 </button>
 
 <button
-class="nav-btn"
-data-page="manualPage"
->
+class="nav-item"
+data-page="manualPage">
 
 <i class="fa-solid fa-pen"></i>
 
-<span>
-Edit
-</span>
+<span>Edit</span>
 
 </button>
 
 <button
-class="nav-btn"
-data-page="historyPage"
->
+class="nav-item"
+data-page="historyPage">
 
 <i class="fa-solid fa-images"></i>
 
-<span>
-Riwayat
-</span>
+<span>Riwayat</span>
 
 </button>
 
 <button
-class="nav-btn"
-data-page="aboutPage"
->
+class="nav-item"
+data-page="aboutPage">
 
 <i class="fa-solid fa-circle-info"></i>
 
-<span>
-About
-</span>
+<span>About</span>
 
 </button>
 
 </nav>
 
-<!-- CANVAS EXPORT -->
+<!-- CANVAS -->
 
 <canvas
 id="exportCanvas"
-hidden
-></canvas>
-
-<!-- LOGO WATERMARK -->
+hidden></canvas>
 
 <img
-src="assets/logo.png"
 id="watermarkLogo"
-hidden
->
+src="assets/logo.png"
+hidden>
 
 </div>
 
