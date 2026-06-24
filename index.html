@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>BP BAYAN GPS MAP</title>
+<link rel="icon" href="assets/icon-192.png">
+
+<link rel="apple-touch-icon"
+href="assets/icon-192.png">
+
+<meta
+name="apple-mobile-web-app-capable"
+content="yes">
+
+<meta
+name="apple-mobile-web-app-status-bar-style"
+content="default">
+
+<meta
+name="apple-mobile-web-app-title"
+content="BP BAYAN GPS MAP">
+
+<meta name="theme-color" content="#0f766e">
+
+<link rel="manifest" href="manifest.json">
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+
+<header class="header">
+<div class="container">
+
+<div class="header-content">
+
+<div>
+<h1>BP BAYAN GPS MAP</h1>
+<p>GPS Camera & Dokumentasi Lapangan</p>
+</div>
+
+<button id="installBtn" class="install-btn hidden">
+Install App
+</button>
+
+</div>
+
+</div>
+</header>
+
+<div class="container">
+
+<div class="grid-layout">
+
+<div class="left-panel">
+
+<div class="card">
+
+<h2>Menu</h2>
+
+<div class="menu-grid">
+
+<button id="btnUpload" class="menu-btn">
+📷
+<span>Upload Foto</span>
+</button>
+
+<button id="btnCamera" class="menu-btn">
+🎥
+<span>Kamera</span>
+</button>
+
+<button id="btnGPS" class="menu-btn">
+📍
+<span>GPS Saya</span>
+</button>
+
+<button id="btnGenerateHD" class="menu-btn">
+🖼️
+<span>Generate HD</span>
+</button>
+
+<button id="btnGenerateFHD" class="menu-btn">
+✨
+<span>Full HD</span>
+</button>
+
+<button id="btnGenerate4K" class="menu-btn">
+🚀
+<span>4K</span>
+</button>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>Informasi Lokasi</h2>
+
+<input
+id="placeName"
+type="text"
+placeholder="Nama Tempat">
+
+<input
+id="activityName"
+type="text"
+placeholder="Nama Kegiatan">
+
+<textarea
+id="address"
+rows="4"
+placeholder="Alamat Lengkap"></textarea>
+
+<div class="two-col">
+
+<input
+id="latitude"
+placeholder="Latitude">
+
+<input
+id="longitude"
+placeholder="Longitude">
+
+</div>
+
+<input
+id="mapsLink"
+type="text"
+placeholder="Paste Link Google Maps">
+
+<button id="extractMapBtn" class="action-btn">
+Ambil Koordinat
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>Tanggal & Waktu</h2>
+
+<div class="two-col">
+
+<input
+id="dateInput"
+type="date">
+
+<input
+id="timeInput"
+type="time">
+
+</div>
+
+<button id="nowBtn" class="action-btn">
+Gunakan Waktu Sekarang
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>Pengaturan Watermark</h2>
+
+<select id="panelColor">
+<option value="black">Hitam</option>
+<option value="blue">Biru</option>
+<option value="green">Hijau</option>
+<option value="red">Merah</option>
+</select>
+
+<select id="fontSize">
+<option value="14">Normal</option>
+<option value="16">Besar</option>
+<option value="18">Extra Besar</option>
+</select>
+
+</div>
+
+</div>
+
+<div class="right-panel">
+
+<div class="card">
+
+<h2>Preview Foto</h2>
+
+<div class="preview-wrapper">
+
+<img id="previewImage">
+
+<div id="watermark">
+
+<div id="wmPlace"></div>
+
+<div id="wmAddress"></div>
+
+<div id="wmLatLng"></div>
+
+<div id="wmDate"></div>
+
+<div id="wmActivity"></div>
+
+</div>
+
+</div>
+
+<video
+id="video"
+autoplay
+playsinline
+class="hidden">
+</video>
+
+<div class="preview-actions">
+
+<button id="captureBtn" class="hidden">
+Ambil Foto
+</button>
+
+<a
+id="downloadBtn"
+download="bp-bayan-gps-map.jpg"
+class="hidden">
+Download Foto
+</a>
+
+</div>
+
+<input
+type="file"
+accept="image/*"
+id="uploadImage"
+hidden>
+
+</div>
+
+<div class="card">
+
+<h2>Tentang Aplikasi</h2>
+
+<div class="about-box">
+
+<h3>BP BAYAN GPS MAP</h3>
+
+<p>
+Aplikasi GPS Camera untuk dokumentasi kegiatan lapangan.
+</p>
+
+<hr>
+
+<p>
+<b>Pembuat :</b><br>
+Ahmad Yani
+</p>
+
+<p>
+<b>Email :</b><br>
+ahmadstimik15@gmail.com
+</p>
+
+<p>
+<b>WhatsApp :</b><br>
+085956684081
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<canvas id="canvas"></canvas>
+
+<script src="app.js"></script>
+
+</body>
+</html>
