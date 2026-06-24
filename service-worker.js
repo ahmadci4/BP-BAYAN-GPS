@@ -1,12 +1,13 @@
 const CACHE_NAME =
-"bp-bayan-gps-camera-v3";
+"bp-bayan-gps-camera-v4";
 
-const urlsToCache = [
+const FILES = [
 
 "./",
 "./index.html",
 "./style.css",
-"./app.js"
+"./app.js",
+"./manifest.json"
 
 ];
 
@@ -22,7 +23,7 @@ CACHE_NAME
 .then(cache=>{
 
 return cache.addAll(
-urlsToCache
+FILES
 );
 
 })
