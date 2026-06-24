@@ -1,96 +1,44 @@
-const CACHE_NAME = "bp-bayan-gps-map-v1";
-
-const urlsToCache = [
-  "./",
-  "./index.html",
-  "./style.css",
-  "./app.js",
-  "./manifest.json"
-];
-
-// INSTALL
+const CACHE_NAME =
+"bp-bayan-gps-map-v21";
 
 self.addEventListener(
 "install",
-event => {
+event=>{
 
 event.waitUntil(
 
-caches.open(
-CACHE_NAME
-)
+caches.open(CACHE_NAME)
+.then(cache=>{
 
-.then(cache => {
-
-return cache.addAll(
-urlsToCache
-);
+return cache.addAll([
+"./",
+"./index.html",
+"./style.css",
+"./app.js"
+]);
 
 })
 
 );
 
-}
-);
-
-// FETCH
+});
 
 self.addEventListener(
 "fetch",
-event => {
+event=>{
 
 event.respondWith(
 
 caches.match(
 event.request
 )
+.then(response=>{
 
-.then(response => {
-
-return response || fetch(
-event.request
-);
+return response ||
+fetch(event.request);
 
 })
 
 );
 
-}
-);
-
-// ACTIVATE
-
-self.addEventListener(
-"activate",
-event => {
-
-event.waitUntil(
-
-caches.keys()
-
-.then(cacheNames => {
-
-return Promise.all(
-
-cacheNames.map(cache => {
-
-if(
-cache !== CACHE_NAME
-){
-
-return caches.delete(
-cache
-);
-
-}
-
-})
-
-);
-
-})
-
-);
-
-}
-);
+});
